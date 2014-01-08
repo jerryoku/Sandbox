@@ -51,7 +51,9 @@ private static final int packetReplyTimeout = 500; // millis
     
     
     /**
-     * 
+     * init 
+     * Initializes the connection (doesn't login).
+     * Initializes the the Chat Manager, and Chat / Message Listeners.
      * @throws XMPPException
      */
     public void init() throws XMPPException {
@@ -75,11 +77,22 @@ private static final int packetReplyTimeout = 500; // millis
         chatManager.addChatListener(chatListener);
     }
     
+    /**
+     * performLogin - Logs into the XMPP Server
+     * @param username - Username to login to the xmpp server
+     * @param password - Password to login to the xmpp server
+     * @throws XMPPException
+     */
     public void performLogin(String username, String password) throws XMPPException {
         if (connection!=null && connection.isConnected()) {
             connection.login(username, password);
         }
     }
+    
+    /**
+     * printRoster - Retrieves the list of people this user has as friends
+     * @throws Exception
+     */
     public void printRoster() throws Exception {
         Roster roster = connection.getRoster();
         Collection<RosterEntry> entries = roster.getEntries();  
@@ -89,6 +102,11 @@ private static final int packetReplyTimeout = 500; // millis
          }
       }
 
+    /**
+     * 
+     * @param available - If the user is avaliable to communicate (talk)
+     * @param status - Any status - "Hello Everybody", "What up peeps", "Don't disturb" any random status
+     */
     public void setStatus(boolean available, String status) {
         
         Presence.Type type = available? Type.available: Type.unavailable;
@@ -99,6 +117,9 @@ private static final int packetReplyTimeout = 500; // millis
         
     }
     
+    /**
+     * Destorys the connection
+     */
     public void destroy() {
         if (connection!=null && connection.isConnected()) {
             connection.disconnect();
